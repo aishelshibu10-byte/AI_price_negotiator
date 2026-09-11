@@ -3,4 +3,4 @@ negotiator_preprocessor.pkl
 db.sqlite3
 __pycache__/
 *.pyc
-.venv/
+.venv/negotiator_model.pkl
