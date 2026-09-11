@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .venv/negotiator_model.pkl
 negotiator_model.pkl
+negotiator_model.pkl
