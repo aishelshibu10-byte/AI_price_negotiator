@@ -22,7 +22,7 @@
             <p><strong>Brand:</strong> {{ product.brand }} | <strong>Category:</strong> {{ product.category }}</p>
             <p class="price">₹{{ product.original_price }}</p>
             <p><strong>Stock:</strong> {{ product.stock }}</p>
-            <a href="#" class="btn">Make an Offer</a>
+            <a href="{% url 'product_detail' product.id %}" class="btn">Make an Offer</a>
         </div>
         {% endfor %}
     </div>
