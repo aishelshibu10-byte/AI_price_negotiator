@@ -10,6 +10,8 @@
         .offer-box { margin-top: 25px; padding-top: 20px; border-top: 1px solid #eee; }
         input[type="number"] { padding: 10px; width: 60%; font-size: 1em; }
         button { padding: 10px 20px; font-size: 1em; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .ai-response { background: #eef6ff; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .ended { background: #fff3cd; padding: 15px; border-radius: 6px; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -20,13 +22,69 @@
         <p class="price">Original Price: ₹{{ product.original_price }}</p>
         <p><strong>Stock Remaining:</strong> {{ product.stock }}</p>
 
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: green;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
         <div class="offer-box">
             <h3>Make an Offer</h3>
-            <form method="POST">
+
+            {% if negotiation.ended %}
+                <div class="ended">
+                    <strong>Negotiation ended.</strong>
+                    {% if negotiation.decision == "ACCEPT" %}
+                        <p>🤝 Deal closed at ₹{{ negotiation.final_price }}</p>
+                    {% else %}
+                        <p>We couldn't reach a deal this time.</p>
+                    {% endif %}
+                </div>
+
+                <form method="POST" style="margin-top:10px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="reset_negotiation">
+                    <button type="submit" style="background:#6c757d;">Start New Negotiation</button>
+                </form>
+            {% else %}
+                <p>Round {{ negotiation.round }} of {{ max_rounds }}</p>
+
+                {% if result %}
+                    <div class="ai-response">
+                        {% if result.decision == "COUNTER" %}
+                            <p>We can't accept ₹{{ result.customer_offer }}, but we can offer it for ₹{{ result.final_price }}.</p>
+                        {% elif result.decision == "COUNTER_VAGUE" %}
+                            <p>That's a bit low for us. You're on the right track — try increasing your offer.</p>
+                        {% elif result.decision == "TOO_LOW" %}
+                            <p>That offer is too far from what we can do. Please try a significantly higher offer.</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="number" name="offer_price" placeholder="Enter your offer price (₹)" required>
+                    <button type="submit">Submit Offer</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="cart-actions" style="margin-top:20px; padding-top:15px; border-top:1px solid #eee;">
+            {% if negotiation.ended and negotiation.decision == "ACCEPT" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_negotiated">
+                    <button type="submit" style="background:#ffb300;">Add to Cart at ₹{{ negotiation.final_price }}</button>
+                </form>
+            {% endif %}
+
+            <form method="POST" style="margin-top:10px;">
                 {% csrf_token %}
-                <input type="number" name="offer_price" placeholder="Enter your offer price (₹)" required>
-                <button type="submit">Submit Offer</button>
+                <input type="hidden" name="action" value="add_original">
+                <button type="submit" style="background:#007bff;">Add to Cart at Original Price</button>
             </form>
+
+            <p style="margin-top:10px;"><a href="{% url 'cart_view' %}">🛒 View Cart</a></p>
         </div>
     </div>
 </body>

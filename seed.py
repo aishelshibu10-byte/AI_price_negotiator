@@ -7,7 +7,7 @@ django.setup()
 from jet.models import Product
 
 products = [
-    {"name": "Apple iPhone 16", "brand": "Apple", "category": "Smartphone", "original_price": 80000.00, "stock": 15, "festival_sale": True},
+    {"name": "iPhone 16", "brand": "Apple", "category": "Smartphone", "original_price": 80000.00, "stock": 15, "festival_sale": True},
     {"name": "Samsung Galaxy S25 Ultra", "brand": "Samsung", "category": "Smartphone", "original_price": 95000.00, "stock": 25, "festival_sale": False},
     {"name": "MacBook Air M4", "brand": "Apple", "category": "Laptop", "original_price": 110000.00, "stock": 8, "festival_sale": True},
     {"name": "PlayStation 5", "brand": "Sony", "category": "Gaming Console", "original_price": 55000.00, "stock": 12, "festival_sale": False},
