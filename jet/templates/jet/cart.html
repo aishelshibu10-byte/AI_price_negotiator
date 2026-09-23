@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart - AI Price Negotiator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .item { display: flex; justify-content: space-between; gap: 20px; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .item-details { flex: 1; }
+        .price { color: #2c3e50; font-weight: bold; }
+        .total { text-align: right; font-size: 1.3em; font-weight: bold; margin-top: 20px; }
+        .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .btn { display: inline-block; padding: 10px 15px; background: #007bff; color: white; text-decoration: none; border: 0; border-radius: 4px; cursor: pointer; }
+        .btn-danger { background: #dc3545; }
+        .btn-success { background: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Cart</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if items %}
+            {% for item in items %}
+                <div class="item">
+                    <div class="item-details">
+                        <h3>{{ item.product.name }}</h3>
+                        <p>{{ item.product.brand }} | Quantity: {{ item.quantity }}</p>
+                        <p class="price">₹{{ item.agreed_price }} each</p>
+                        {% if item.negotiated %}<p>Negotiated price</p>{% endif %}
+                    </div>
+                    <div>
+                        <p class="price">₹{{ item.subtotal }}</p>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <p class="total">Total: ₹{{ total }}</p>
+            <div class="actions">
+                <a href="{% url 'product_list' %}" class="btn">Continue Shopping</a>
+                <a href="{% url 'checkout_view' %}" class="btn btn-success">Checkout</a>
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+            <a href="{% url 'product_list' %}" class="btn">Browse Products</a>
+        {% endif %}
+    </div>
+</body>
+</html>

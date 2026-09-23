@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug: {{ product.name }} - Negotiation Predictions</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; }
+        .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        th { background: #2c3e50; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'product_list' %}">&larr; Back to Products</a>
+        <h1>Debug: {{ product.name }}</h1>
+        <p><strong>Brand:</strong> {{ product.brand }} | <strong>Category:</strong> {{ product.category }}</p>
+        <p><strong>Original Price:</strong> ₹{{ product.original_price }}</p>
+        <p><strong>Stock:</strong> {{ product.stock }} | <strong>Festival Sale:</strong> {{ product.festival_sale }}</p>
+
+        <h3>Predicted Minimum Acceptable Price (MAP)</h3>
+        <table>
+            <tr>
+                <th>Customer Segment</th>
+                <th>Negotiation Round</th>
+                <th>Predicted MAP (₹)</th>
+            </tr>
+            {% for p in predictions %}
+            <tr>
+                <td>{{ p.segment }}</td>
+                <td>{{ p.round }}</td>
+                <td>{{ p.predicted_min_price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
